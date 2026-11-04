@@ -1,3 +1,4 @@
+
 name: Docker CI
 
 on:
@@ -9,9 +10,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Descargar codigo
         uses: actions/checkout@v4
 
       - name: Construir imagen Docker
         run: docker build -t mi-primer-devops:ci .
+
+      - name: Iniciar sesion en GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Etiquetar imagen
+        run: docker tag mi-primer-devops:ci ghcr.io/kira-g5/mi-primer-devops:latest
+
+      - name: Publicar imagen en GHCR
+        run: docker push ghcr.io/kira-g5/mi-primer-devops:latest
