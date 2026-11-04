@@ -1,5 +1,5 @@
 FROM nginx:alpine
 
-COPY index.html /usr/share/nginx/html/index.html
+COPY archivo-inexistente.html /usr/share/nginx/html/index.html
 
 EXPOSE 80
